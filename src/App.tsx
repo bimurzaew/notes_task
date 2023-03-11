@@ -1,6 +1,6 @@
 import React from "react";
-import Header from "./Header";
-import Notes from "./Notes";
+import Notes from "./components/Notes";
+import Header from "./components/Header";
 
 function App() {
   return (

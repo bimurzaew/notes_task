@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import Box from "@mui/material/Paper";
 import NoteItem from "./NoteItem";
 import { Button } from "@mui/material";
@@ -7,45 +7,47 @@ import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { EnumInputKeys, Note } from "../../types/NoteTypes";
 import { getCurrentDateTime } from "../../utils/DateUtils";
 
+const initialState = [
+  {
+    id: 1,
+    title: "Do something",
+    description: "somewhere",
+    date: getCurrentDateTime(),
+  },
+];
+
 const Notes = () => {
-  const [notes, setNotes] = useLocalStorage<Note[]>(
-    [
-      {
-        id: 1,
-        title: "Do something",
-        description: "somewhere",
-        date: getCurrentDateTime(),
-      },
-    ],
-    "notes"
-  );
+  const [notes, setNotes] = useLocalStorage<Note[]>(initialState, "notes");
 
   const handleAddNote = () => {
     setNotes((prev) => [
       ...prev,
       {
-        id: prev.length + 1,
-        title: `Заметка ${prev.length + 1}`,
+        id: prev[prev.length - 1].id + 1,
+        title: `Заметка ${prev[prev.length - 1].id + 1}`,
         description: "",
         date: getCurrentDateTime(),
       },
     ]);
   };
 
-  const handleRemoveItem = (id: number) => {
+  const handleRemoveItem = useCallback((id: number) => {
     setNotes((prev) => prev.filter((note) => note.id !== id));
-  };
+  }, []);
 
-  const handleChange = (value: string, id: number, key: EnumInputKeys) => {
-    setNotes((prev) =>
-      prev.map((note) => {
-        if (note.id === id) {
-          return { ...note, [key]: value };
-        }
-        return note;
-      })
-    );
-  };
+  const handleChange = useCallback(
+    (value: string, id: number, key: EnumInputKeys) => {
+      setNotes((prev) =>
+        prev.map((note) => {
+          if (note.id === id) {
+            return { ...note, [key]: value };
+          }
+          return note;
+        })
+      );
+    },
+    [notes]
+  );
 
   return (
     <>

@@ -11,6 +11,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import { EnumInputKeys, Note } from "../../types/NoteTypes";
 import "react-quill/dist/quill.snow.css";
+import { modules } from "../../EditorModules";
 
 interface NoteItemProps {
   note: Note;
@@ -35,17 +36,6 @@ const MyTextField = styled(TextField)({
     padding: 15,
   },
 });
-
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, 3, false] }],
-    ["bold", "italic", "underline", "strike", "link"],
-    [{ align: [] }],
-    [{ color: [] }, { background: [] }],
-    [{ script: "sub" }, { script: "super" }],
-    ["clean"],
-  ],
-};
 
 const NoteItem: FC<NoteItemProps> = ({ note, handler, handleRemove }) => {
   return (
